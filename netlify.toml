@@ -80,6 +80,23 @@
   to = "/sector-villas.html"
   status = 200
 
+# Dedicated Google Ads landing pages — kept out of primary nav, targeted by
+# paid campaigns per keyword intent. Do not link these from the homepage/footer.
+[[redirects]]
+  from = "/villa-renovation-dubai"
+  to = "/villa-renovation-dubai.html"
+  status = 200
+
+[[redirects]]
+  from = "/commercial-fit-out-dubai"
+  to = "/commercial-fit-out-dubai.html"
+  status = 200
+
+[[redirects]]
+  from = "/apartment-renovation-dubai"
+  to = "/apartment-renovation-dubai.html"
+  status = 200
+
 # /fitout-inquiry was linked from contact.html and sector-offices.html but
 # no dedicated inquiry page exists — redirecting to /contact until one is built.
 [[redirects]]
