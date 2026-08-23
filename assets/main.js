@@ -1,3 +1,33 @@
+// ===== GTM / GA4 conversion event tracking =====
+// dataLayer is created by the GTM snippet in <head>; guard here in case this
+// script ever runs on a page without it (e.g. local testing without GTM).
+window.dataLayer = window.dataLayer || [];
+
+// WhatsApp click tracking — fires on any link to wa.me, anywhere on the page
+// (header, hero CTAs, contact panel, footer, etc.)
+document.addEventListener('click', (e) => {
+  const link = e.target.closest('a[href*="wa.me"]');
+  if (link) {
+    window.dataLayer.push({
+      event: 'whatsapp_click',
+      link_url: link.href,
+      page_path: window.location.pathname
+    });
+  }
+});
+
+// Phone click tracking — fires on any tel: link
+document.addEventListener('click', (e) => {
+  const link = e.target.closest('a[href^="tel:"]');
+  if (link) {
+    window.dataLayer.push({
+      event: 'phone_click',
+      link_url: link.href,
+      page_path: window.location.pathname
+    });
+  }
+});
+
 // ===== Header scroll state =====
 const header = document.querySelector('.site-header');
 if(header){
@@ -67,18 +97,32 @@ document.querySelectorAll('.rfq-form').forEach(form => {
     const payload = {};
     formData.forEach((value, key) => { payload[key] = value; });
 
+    // RFQ / consultation-request conversion event. form-name distinguishes
+    // which page the lead came from (rfq-general, rfq-villa-renovation,
+    // rfq-commercial-fit-out, rfq-apartment-renovation, rfq-office) so GTM/GA4
+    // can report them individually or roll them all up as one conversion.
+    const trackSubmit = () => {
+      window.dataLayer.push({
+        event: 'rfq_form_submit',
+        form_name: payload['form-name'] || form.getAttribute('name') || 'unknown',
+        page_path: window.location.pathname
+      });
+    };
+
     fetch('/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: encodeFormData(payload)
     })
     .then(() => {
+      trackSubmit();
       const msg = form.parentElement.querySelector('.confirm-msg');
       if (msg) msg.classList.add('show');
       form.reset();
     })
     .catch(() => {
       // Not deployed on Netlify yet, or offline — still confirm locally so the UI doesn't feel broken.
+      trackSubmit();
       const msg = form.parentElement.querySelector('.confirm-msg');
       if (msg) msg.classList.add('show');
       form.reset();
