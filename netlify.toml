@@ -1,0 +1,88 @@
+[build]
+  publish = "."
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+
+# ---------------------------------------------------------------------------
+# Every page on this site links internally using clean paths (/about,
+# /capabilities, /process, etc.) but the actual files are named *.html
+# (about.html, capabilities.html...). Netlify only resolves clean paths to
+# .html files automatically if "Pretty URLs" is enabled in the dashboard
+# (Site settings > Build & deploy > Post processing). Rather than depend on
+# that toggle being on, these rewrites make it work regardless.
+# ---------------------------------------------------------------------------
+[[redirects]]
+  from = "/about"
+  to = "/about.html"
+  status = 200
+
+[[redirects]]
+  from = "/approvals"
+  to = "/approvals.html"
+  status = 200
+
+[[redirects]]
+  from = "/capabilities"
+  to = "/capabilities.html"
+  status = 200
+
+[[redirects]]
+  from = "/careers"
+  to = "/careers.html"
+  status = 200
+
+[[redirects]]
+  from = "/contact"
+  to = "/contact.html"
+  status = 200
+
+[[redirects]]
+  from = "/insights"
+  to = "/insights.html"
+  status = 200
+
+[[redirects]]
+  from = "/privacy"
+  to = "/privacy.html"
+  status = 200
+
+[[redirects]]
+  from = "/process"
+  to = "/process.html"
+  status = 200
+
+[[redirects]]
+  from = "/sectors"
+  to = "/sectors.html"
+  status = 200
+
+[[redirects]]
+  from = "/sector-apartments"
+  to = "/sector-apartments.html"
+  status = 200
+
+[[redirects]]
+  from = "/sector-fnb-retail"
+  to = "/sector-fnb-retail.html"
+  status = 200
+
+[[redirects]]
+  from = "/sector-offices"
+  to = "/sector-offices.html"
+  status = 200
+
+[[redirects]]
+  from = "/sector-villas"
+  to = "/sector-villas.html"
+  status = 200
+
+# /fitout-inquiry was linked from contact.html and sector-offices.html but
+# no dedicated inquiry page exists — redirecting to /contact until one is built.
+[[redirects]]
+  from = "/fitout-inquiry"
+  to = "/contact"
+  status = 301
