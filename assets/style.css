@@ -209,12 +209,12 @@ section{padding:6rem 0;}
 /* ---------- HOME HERO ---------- */
 .home-hero{
   position:relative;
-  min-height:100vh;
   display:flex;
-  align-items:center;
+  align-items:flex-start;
   background:var(--onyx);
   color:var(--offwhite);
   overflow:hidden;
+  padding:0;
 }
 .home-hero .mono-bg{
   position:absolute;
@@ -226,7 +226,7 @@ section{padding:6rem 0;}
   opacity:0.5;
 }
 .home-hero .mono-bg path{fill:none;stroke:rgba(201,169,106,0.35);stroke-width:1.1;}
-.home-hero-inner{position:relative;z-index:2;max-width:760px;padding:9rem 0 5rem;}
+.home-hero-inner{position:relative;z-index:2;max-width:760px;padding-top:6.5rem;padding-bottom:5rem;}
 .home-hero h1{
   font-size:clamp(2.6rem,6.6vw,4.9rem);
   text-transform:uppercase;
