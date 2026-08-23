@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sectors &amp; Portfolio | Design Code</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Montserrat:wght@400;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="site-header" id="header">
+  <a class='brand' href='/'>
+    <svg viewBox="0 0 60 60"><path d="M8 45 L8 15 L30 15 L30 8 L52 8 L52 38 L30 38 L30 52 L8 52 Z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="brand-word">Design Code<small>Design &middot; Build &middot; Deliver</small></span>
+  </a>
+  <nav>
+    <ul>
+      <li><a href='/about'>About</a></li>
+      <li><a href='/capabilities'>Capabilities</a></li>
+      <li><a class='active' href='/sectors'>Sectors</a></li>
+      <li><a href='/process'>Process</a></li>
+      <li><a href='/insights'>Insights</a></li>
+      <li><a href='/contact'>Contact</a></li>
+    </ul>
+  </nav>
+  <div style="display:flex;align-items:center;gap:1.4rem;">
+    <span class="header-phone">+971 56 856 4672</span>
+    <button class="nav-toggle" aria-label="Toggle menu">☰</button>
+  </div>
+</header>
+
+<section class="page-hero">
+  <div class="wrap">
+    <div class="breadcrumb"><a href='/'>Home</a> / Sectors &amp; Portfolio</div>
+    <h1>Two sectors. One filter.</h1>
+    <p>Browse by discipline — residential or commercial — or drill into a specific project type below.</p>
+  </div>
+</section>
+
+<section id="residential">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Portfolio</span>
+      <h2>What we handle, by sector</h2>
+      <p>Two disciplines, four project types. Each sector page carries its own write-up of the kind of work we take on.</p>
+    </div>
+
+    <div class="gate-grid reveal" id="commercial">
+      <a class='gate-card' href='/sector-villas'>
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=900&h=1000&fit=crop" alt="Luxury villa interior">
+        <div class="gate-content"><span class="eyebrow">Residential</span><h3>Villas</h3><p>Bespoke architectural luxury, custom finishes, landscaping and pool work.</p><span class="learn">See Villa Portfolio →</span></div>
+      </a>
+      <a class='gate-card' href='/sector-apartments'>
+        <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=900&h=1000&fit=crop" alt="Apartment interior">
+        <div class="gate-content"><span class="eyebrow">Residential</span><h3>Apartments</h3><p>High-rise fit-outs, layout reconfiguration, furnished move-in-ready units.</p><span class="learn">See Apartment Portfolio →</span></div>
+      </a>
+      <a class='gate-card' href='/sector-fnb-retail'>
+        <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=900&h=1000&fit=crop" alt="Restaurant interior">
+        <div class="gate-content"><span class="eyebrow">Commercial</span><h3>F&amp;B &amp; Retail</h3><p>Restaurants, cafés and retail showrooms, built around brand and foot traffic.</p><span class="learn">See F&amp;B Portfolio →</span></div>
+      </a>
+      <a class='gate-card' href='/sector-offices'>
+        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=900&h=1000&fit=crop" alt="Corporate office">
+        <div class="gate-content"><span class="eyebrow">Commercial</span><h3>Office Spaces</h3><p>Headquarters, secure offices and creative studios, MEP-coordinated throughout.</p><span class="learn">See Office Portfolio →</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="brand" style="margin-bottom:1rem;">
+          <svg viewBox="0 0 60 60" style="width:30px;height:30px;stroke:var(--accent);fill:none;stroke-width:1.3;"><path d="M8 45 L8 15 L30 15 L30 8 L52 8 L52 38 L30 38 L30 52 L8 52 Z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <span class="brand-word">Design Code<small>Design &middot; Build &middot; Deliver</small></span>
+        </div>
+        <p style="max-width:32ch;font-size:0.86rem;">Design. Build. Deliver. Turnkey interior fit-out across residential and commercial sectors in the UAE. Est. 2019, Dubai.</p>
+      </div>
+      <div>
+        <h5>Company</h5>
+        <ul>
+          <li><a href='/about'>About Us</a></li>
+          <li><a href='/careers'>Careers</a></li>
+          <li><a href='/insights'>News &amp; Insights</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Sectors</h5>
+        <ul>
+          <li><a href='/sector-villas'>Villas</a></li>
+          <li><a href='/sector-apartments'>Apartments</a></li>
+          <li><a href='/sector-fnb-retail'>F&amp;B &amp; Retail</a></li>
+          <li><a href='/sector-offices'>Office Spaces</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Legal &amp; Contact</h5>
+        <ul>
+          <li><a href='/approvals'>Approvals Guide</a></li>
+          <li><a href='/privacy'>Privacy &amp; Terms</a></li>
+          <li><a href='/contact'>Contact &amp; RFQ</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 DESIGN CODE — DUBAI, UAE</span>
+      <span>hello@designcode.ae</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/main.js"></script>
+</body>
+</html>
