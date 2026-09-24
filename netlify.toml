@@ -97,6 +97,19 @@
   to = "/apartment-renovation-dubai.html"
   status = 200
 
+# Insights articles live in /articles/ and are served at /insights/<slug>.
+# Add one rewrite per new article.
+[[redirects]]
+  from = "/insights/retail-fit-out-uae"
+  to = "/articles/retail-fit-out-uae.html"
+  status = 200
+
+# Insights RSS feed (articles only)
+[[headers]]
+  for = "/insights-feed.xml"
+  [headers.values]
+    Content-Type = "application/rss+xml; charset=utf-8"
+
 # /fitout-inquiry was linked from contact.html and sector-offices.html but
 # no dedicated inquiry page exists — redirecting to /contact until one is built.
 [[redirects]]
