@@ -732,3 +732,25 @@ a.insight-card:hover{border-color:var(--accent);transform:translateY(-3px);}
   .article-toc{display:none;}
   .article-panel{padding:1.8rem 1.4rem;}
 }
+
+/* ---------- SHARE BAR (standard for all Insights articles) ----------
+   Markup: <div class="share-bar" data-share></div> — built by main.js */
+.share-bar{display:flex;flex-wrap:wrap;align-items:center;gap:0.6rem;}
+.share-label{font-family:var(--font-mono);font-size:0.68rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--accent);margin-right:0.4rem;}
+.share-btn{
+  display:inline-flex;align-items:center;gap:0.45rem;
+  padding:0.55rem 0.95rem;background:transparent;cursor:pointer;
+  border:1px solid var(--line-light);color:var(--ink);
+  font-family:var(--font-mono);font-size:0.66rem;letter-spacing:0.12em;text-transform:uppercase;
+  transition:border-color .2s,color .2s,background .2s;
+}
+.share-btn svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
+.share-btn:hover{border-color:var(--accent);color:var(--accent);}
+.share-btn.is-done{background:var(--accent);border-color:var(--accent);color:var(--onyx);}
+.page-hero .share-bar{margin-top:1.6rem;}
+.page-hero .share-btn,.section-dark .share-btn{border-color:var(--line-dark);color:var(--offwhite);}
+.page-hero .share-btn:hover,.section-dark .share-btn:hover{border-color:var(--accent);color:var(--accent);}
+.article-body .share-bar{margin-top:3rem;padding-top:1.4rem;border-top:1px solid var(--line-light);}
+.article-body .share-bar a{border-bottom:1px solid var(--line-light);}
+.article-body .share-bar a:hover{border-bottom-color:var(--accent);}
+@media (max-width:560px){.share-label{width:100%;margin-bottom:0.2rem;}}
