@@ -754,3 +754,7 @@ a.insight-card:hover{border-color:var(--accent);transform:translateY(-3px);}
 .article-body .share-bar a{border-bottom:1px solid var(--line-light);}
 .article-body .share-bar a:hover{border-bottom-color:var(--accent);}
 @media (max-width:560px){.share-label{width:100%;margin-bottom:0.2rem;}}
+
+/* Header WhatsApp icon */
+.header-wa{display:inline-flex;align-items:center;color:#25D366;transition:opacity .2s;}
+.header-wa:hover{opacity:.8;}
