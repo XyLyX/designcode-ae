@@ -91,42 +91,52 @@ const encodeFormData = (data) => {
 };
 
 document.querySelectorAll('.rfq-form').forEach(form => {
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (form.dataset.submitting === 'true') return;
+
     const formData = new FormData(form);
     const payload = {};
     formData.forEach((value, key) => { payload[key] = value; });
+    const formName = payload['form-name'] || form.getAttribute('name') || 'unknown';
+    const confirmation = form.parentElement.querySelector('.confirm-msg');
+    const submitButton = form.querySelector('[type="submit"]');
+    let error = form.parentElement.querySelector('.rfq-submit-error');
+    if (!error) {
+      error = document.createElement('p');
+      error.className = 'rfq-submit-error';
+      error.setAttribute('role', 'alert');
+      error.style.cssText = 'color:#9b2525;margin-top:12px;font-weight:600;';
+      form.insertAdjacentElement('afterend', error);
+    }
+    error.textContent = '';
+    if (confirmation) confirmation.classList.remove('show');
+    form.dataset.submitting = 'true';
+    if (submitButton) submitButton.disabled = true;
 
-    // RFQ / consultation-request conversion event. form-name distinguishes
-    // which page the lead came from (rfq-general, rfq-villa-renovation,
-    // rfq-commercial-fit-out, rfq-apartment-renovation, rfq-office) so GTM/GA4
-    // can report them individually or roll them all up as one conversion.
-    const trackSubmit = () => {
+    try {
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: encodeFormData(payload)
+      });
+      if (!response.ok) throw new Error('Form submission returned HTTP ' + response.status);
+
       window.dataLayer.push({
         event: 'rfq_form_submit',
-        form_name: payload['form-name'] || form.getAttribute('name') || 'unknown',
+        form_name: formName,
         page_path: window.location.pathname
       });
-    };
-
-    fetch('/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: encodeFormData(payload)
-    })
-    .then(() => {
-      trackSubmit();
-      const msg = form.parentElement.querySelector('.confirm-msg');
-      if (msg) msg.classList.add('show');
+      if (confirmation) confirmation.classList.add('show');
       form.reset();
-    })
-    .catch(() => {
-      // Not deployed on Netlify yet, or offline — still confirm locally so the UI doesn't feel broken.
-      trackSubmit();
-      const msg = form.parentElement.querySelector('.confirm-msg');
-      if (msg) msg.classList.add('show');
-      form.reset();
-    });
+    } catch (err) {
+      // Keep the customer's details intact and never count a failed request as a lead.
+      console.error('RFQ submission failed:', err);
+      error.textContent = 'Your enquiry could not be confirmed. Please retry, or contact us by phone or WhatsApp.';
+    } finally {
+      delete form.dataset.submitting;
+      if (submitButton) submitButton.disabled = false;
+    }
   });
 });
 
