@@ -1,3 +1,4 @@
+import { authorize, limit as enforceLimit } from "./_ai-studio-security.mjs";
 // Internal-only, default-disabled upload scaffold. NOT a public customer endpoint.
 import { createHmac, timingSafeEqual, randomUUID } from "node:crypto";
 const json = (data, status = 200) => new Response(JSON.stringify(data), { status,
@@ -21,6 +22,9 @@ export default async function handler(request) {
   if (!key || key.length<32 || !signing || signing.length<32 || !service ||
     url !== "https://zjiemjcilgbxrtqcovkz.supabase.co") return json({error:"Server not configured"},503);
   if (!same(request.headers.get("x-ai-studio-preview-key"),key)) return json({error:"Unauthorized"},401);
+  const auth=await authorize(request);
+  if(auth.error)return auth.error;
+  if(!await enforceLimit(auth.key,auth.userId,"ai-studio-upload.mjs",20))return respond({error:"Rate limit exceeded"},429);
   const token=request.headers.get("x-ai-studio-session-token") || "";
   const match=/^([0-9a-f-]{36})\.([0-9]{10})\.([0-9a-f]{64})$/i.exec(token);
   if (!match || !uuid.test(match[1])) return json({error:"Invalid session"},401);
@@ -39,11 +43,11 @@ export default async function handler(request) {
   if (!detected || detected[0]!==suppliedType) return json({error:"File signature does not match image type"},415);
   const headers={apikey:service,Authorization:"Bearer "+service};
   try {
-    const check=await fetch(url+"/rest/v1/ai_design_sessions?id=eq."+sessionId+"&select=id,status,consent_processing_at,consent_version",{
+    const check=await fetch(url+"/rest/v1/ai_design_sessions?id=eq."+sessionId+"&select=id,owner_user_id,status,consent_processing_at,consent_version",{
       headers,signal:AbortSignal.timeout(8000)});
     if (!check.ok) return json({error:"Unable to verify session"},502);
     const sessions=await check.json();
-    if (sessions.length!==1) return json({error:"Session not found"},404);
+    if (sessions.length!==1 || sessions[0].owner_user_id!==auth.userId) return json({error:"Session not found"},404);
     // Fail closed: an explicit, persisted consent record is mandatory.
     const session=sessions[0];
     if (!session.consent_processing_at || !session.consent_version) return json({error:"AI processing consent required"},403);
