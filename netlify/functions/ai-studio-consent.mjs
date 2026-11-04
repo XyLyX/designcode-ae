@@ -1,3 +1,4 @@
+import { authorize, limit as enforceLimit } from "./_ai-studio-security.mjs";
 // Private integration-only consent endpoint; disabled until explicitly enabled.
 // A preview key is NOT customer authentication. Do not expose to browsers.
 import { createHmac, timingSafeEqual } from "node:crypto";
@@ -16,6 +17,9 @@ export default async function handler(request){
   const m=/^([0-9a-f-]{36})\.([0-9]{10})\.([0-9a-f]{64})$/i.exec(token);
   if(!m||!uuid.test(m[1])||Number(m[2])<Math.floor(Date.now()/1000)||Number(m[2])>Math.floor(Date.now()/1000)+1800||
     !eq(m[3],createHmac("sha256",secret).update(m[1]+"."+m[2]).digest("hex")))return respond({error:"Invalid or expired session"},401);
+  const auth=await authorize(request);
+  if(auth.error)return auth.error;
+  if(!await enforceLimit(auth.key,auth.userId,"ai-studio-consent.mjs",12))return respond({error:"Rate limit exceeded"},429);
   if(!(request.headers.get("content-type")||"").toLowerCase().startsWith("application/json"))return respond({error:"JSON required"},415);
   let body;try{const raw=await request.text();if(Buffer.byteLength(raw,"utf8")>1024)return respond({error:"Too large"},413);body=JSON.parse(raw);}catch{return respond({error:"Invalid JSON"},400);}
   // Version is controlled by the server, not supplied by a caller.
@@ -24,10 +28,10 @@ export default async function handler(request){
   if(!body||body.policy_version!==version||body.ai_processing!==true||body.contact!==true||body.marketing!==false)return respond({error:"Explicit consent required"},400);
   const headers={apikey:service,Authorization:"Bearer "+service,"content-type":"application/json"};
   try{
-    const check=await fetch(url+"/rest/v1/ai_design_sessions?id=eq."+m[1]+"&select=id,status,consent_processing_at",{headers,signal:AbortSignal.timeout(8000)});
+    const check=await fetch(url+"/rest/v1/ai_design_sessions?id=eq."+m[1]+"&select=id,owner_user_id,status,consent_processing_at",{headers,signal:AbortSignal.timeout(8000)});
     if(!check.ok)return respond({error:"Session lookup failed"},502);
     const rows=await check.json();
-    if(rows.length!==1||rows[0].status!=="draft"||rows[0].consent_processing_at)return respond({error:"Session not eligible"},409);
+    if(rows.length!==1||rows[0].owner_user_id!==auth.userId||rows[0].status!=="draft"||rows[0].consent_processing_at)return respond({error:"Session not eligible"},409);
     // This endpoint is deliberately fail-closed: atomic consent persistence is
     // required to prevent partial records from being treated as valid consent.
     const rpc=await fetch(url+"/rest/v1/rpc/ai_design_record_consent",{
