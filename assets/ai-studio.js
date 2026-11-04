@@ -46,7 +46,7 @@
       if(!result.access_token||!result.expires_in)throw new Error('No valid session returned');
       accessToken=result.access_token;refreshToken=result.refresh_token||null;expiresAt=Date.now()+result.expires_in*1000;
       message(loginStatus,'Email verified. You can prepare a private design request.');
-      if(config.submission_enabled===true){$('consent').disabled=false;$('contact-consent').disabled=false;$('marketing-consent').disabled=false;form.querySelector('button[type=submit]').disabled=false;form.querySelector('button[type=submit]').textContent='Submit private design request';}
+      if(config.submission_enabled===true){$('consent').disabled=false;$('contact-consent').disabled=false;form.querySelector('button[type=submit]').disabled=false;form.querySelector('button[type=submit]').textContent='Submit private design request';}
       email.disabled=true;code.disabled=true;send.disabled=true;
     }catch(e){message(loginStatus,e.message);verify.disabled=false;}
   });
