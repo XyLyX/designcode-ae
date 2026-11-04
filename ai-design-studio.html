@@ -20,6 +20,19 @@
 <p style="letter-spacing:.14em;text-transform:uppercase;margin-top:36px">Private development preview</p>
 <h1>AI Design Studio</h1>
 <p>Describe your living room or bedroom and prepare a concept brief for a professional design review. AI-generated concepts are not measured drawings, approvals, or binding quotations.</p>
+<section class="ai-panel" aria-labelledby="login-heading">
+<h2 id="login-heading">Account access</h2>
+<p>Sign in with a verified email before submitting a design request. Email login will become available after the private preview is approved.</p>
+<form id="ai-login" autocomplete="on">
+<div class="ai-grid">
+<div class="ai-field"><label for="login-email">Email address</label><input id="login-email" type="email" name="email" autocomplete="email" maxlength="254" required placeholder="you@example.com"></div>
+<div class="ai-field"><label for="login-code">Email verification code</label><input id="login-code" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="Code from email" disabled></div>
+</div>
+<p id="login-status" role="status" aria-live="polite">Authentication is not enabled in this development preview.</p>
+<button class="ai-btn" id="request-code" type="button" disabled>Send verification code</button>
+<button class="ai-btn" id="verify-code" type="button" disabled>Verify and continue</button>
+</form>
+</section>
 <section class="ai-panel" aria-labelledby="intake-heading">
 <h2 id="intake-heading">Your space</h2>
 <form id="ai-intake" novalidate>
@@ -30,11 +43,17 @@
 <div class="ai-field"><label for="dimensions">Room dimensions (optional)</label><input id="dimensions" name="dimensions_note" maxlength="200" placeholder="e.g. 4m × 5m"></div>
 <div class="ai-field full"><label for="restrictions">What must stay or cannot change?</label><textarea id="restrictions" name="restrictions_note" maxlength="1000" rows="3" placeholder="Existing furniture, rental restrictions, colours to avoid…"></textarea></div>
 <div class="ai-field full"><label for="photo">Room photo (local preview only)</label><input id="photo" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="photo-help"><span id="photo-help" class="ai-hint">One JPEG, PNG or WebP photo, maximum 10 MB. This development preview does not upload your photo.</span></div>
-<div class="ai-field full"><label><input type="checkbox" id="consent" disabled> I consent to AI processing of my room photographs under the published privacy notice.</label><span class="ai-hint">Consent and privacy documentation are being finalised. Submission is intentionally disabled.</span></div>
+<fieldset class="ai-field full" style="border:1px solid #d5d0c3;padding:16px">
+<legend>Privacy and consent</legend>
+<label><input type="checkbox" id="consent" disabled> I explicitly consent to processing my uploaded room photograph using AI services for the purpose of preparing a design concept.</label>
+<label><input type="checkbox" id="contact-consent" disabled> I agree to be contacted about this design request.</label>
+<label><input type="checkbox" id="marketing-consent" disabled> I would also like to receive marketing updates (optional).</label>
+<p class="ai-hint">Consent is not being collected in this preview. The final notice must identify AI providers, international transfers, retention, withdrawal and deletion rights before activation. Marketing is optional.</p>
+</fieldset>
 </div>
 <p id="photo-status" role="status" aria-live="polite"></p>
 <button class="ai-btn" type="submit" disabled>Start design analysis — coming soon</button>
 </form>
 </section>
-<p class="ai-hint">Development only. No customer information is submitted or stored through this page.</p>
+<p class="ai-hint">Development only. No login email, photo, or design request is transmitted by this preview.</p>
 </main><script src="/assets/ai-studio.js" defer></script></body></html>
