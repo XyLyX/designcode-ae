@@ -11,8 +11,8 @@ export default async function handler(request){
   if(process.env.AI_STUDIO_API_ENABLED!=="true"||process.env.AI_STUDIO_CONSENT_ENABLED!=="true")return respond({error:"Not available"},503);
   const key=process.env.AI_STUDIO_PREVIEW_KEY,secret=process.env.AI_STUDIO_SESSION_SIGNING_SECRET,
     service=process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if(!key||key.length<32||!secret||secret.length<32||!service||process.env.SUPABASE_URL!==url)return respond({error:"Server not configured"},503);
-  if(!eq(request.headers.get("x-ai-studio-preview-key"),key))return respond({error:"Unauthorized"},401);
+  if(!secret||secret.length<32||!service||process.env.SUPABASE_URL!==url)return respond({error:"Server not configured"},503);
+  if(process.env.AI_STUDIO_REQUIRE_PREVIEW_KEY==="true"&&(!key||key.length<32||!eq(request.headers.get("x-ai-studio-preview-key"),key)))return respond({error:"Unauthorized"},401);
   const token=request.headers.get("x-ai-studio-session-token")||"";
   const m=/^([0-9a-f-]{36})\.([0-9]{10})\.([0-9a-f]{64})$/i.exec(token);
   if(!m||!uuid.test(m[1])||Number(m[2])<Math.floor(Date.now()/1000)||Number(m[2])>Math.floor(Date.now()/1000)+1800||
