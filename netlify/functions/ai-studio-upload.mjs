@@ -24,7 +24,7 @@ export default async function handler(request) {
   if (process.env.AI_STUDIO_REQUIRE_PREVIEW_KEY==="true" && (!key || key.length<32 || !same(request.headers.get("x-ai-studio-preview-key"),key))) return json({error:"Unauthorized"},401);
   const auth=await authorize(request);
   if(auth.error)return auth.error;
-  if(!await enforceLimit(auth.key,auth.userId,"ai-studio-upload.mjs",20))return respond({error:"Rate limit exceeded"},429);
+  if(!await enforceLimit(auth.key,auth.userId,"ai-studio-upload.mjs",20))return json({error:"Rate limit exceeded"},429);
   const token=request.headers.get("x-ai-studio-session-token") || "";
   const match=/^([0-9a-f-]{36})\.([0-9]{10})\.([0-9a-f]{64})$/i.exec(token);
   if (!match || !uuid.test(match[1])) return json({error:"Invalid session"},401);
