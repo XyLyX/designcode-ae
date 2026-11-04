@@ -42,13 +42,13 @@
 <div class="ai-field"><label for="budget">Indicative budget (AED)</label><input id="budget" name="budget_aed" type="number" min="0" step="100" placeholder="e.g. 25000"></div>
 <div class="ai-field"><label for="dimensions">Room dimensions (optional)</label><input id="dimensions" name="dimensions_note" maxlength="200" placeholder="e.g. 4m × 5m"></div>
 <div class="ai-field full"><label for="restrictions">What must stay or cannot change?</label><textarea id="restrictions" name="restrictions_note" maxlength="1000" rows="3" placeholder="Existing furniture, rental restrictions, colours to avoid…"></textarea></div>
-<div class="ai-field full"><label for="photo">Room photo (local preview only)</label><input id="photo" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="photo-help"><span id="photo-help" class="ai-hint">One JPEG, PNG or WebP photo, maximum 10 MB. This development preview does not upload your photo.</span></div>
+<div class="ai-field full"><label for="photo">Room photo</label><input id="photo" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="photo-help"><span id="photo-help" class="ai-hint">One JPEG, PNG or WebP photo, maximum 10 MB. The development preview does not upload until the private pilot is explicitly enabled.</span></div>
 <fieldset class="ai-field full" style="border:1px solid #d5d0c3;padding:16px">
 <legend>Privacy and consent</legend>
 <label><input type="checkbox" id="consent" disabled> I explicitly consent to processing my uploaded room photograph using AI services for the purpose of preparing a design concept.</label>
 <label><input type="checkbox" id="contact-consent" disabled> I agree to be contacted about this design request.</label>
-<label><input type="checkbox" id="marketing-consent" disabled> I would also like to receive marketing updates (optional).</label>
-<p class="ai-hint">Consent is not being collected in this preview. The final notice must identify AI providers, international transfers, retention, withdrawal and deletion rights before activation. Marketing is optional.</p>
+<label><input type="checkbox" id="marketing-consent" disabled> I would also like to receive marketing updates (optional; not collected during the pilot).</label>
+<p class="ai-hint">Consent is not being collected in this preview. The final notice must identify AI providers, international transfers, retention, withdrawal and deletion rights before activation. Marketing consent is not collected during this pilot.</p>
 </fieldset>
 </div>
 <p id="photo-status" role="status" aria-live="polite"></p>
