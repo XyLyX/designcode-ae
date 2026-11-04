@@ -19,9 +19,9 @@ export default async function handler(request) {
   if (process.env.AI_STUDIO_API_ENABLED !== "true" || process.env.AI_STUDIO_UPLOAD_ENABLED !== "true") return json({error:"Not available"},503);
   const key=process.env.AI_STUDIO_PREVIEW_KEY, signing=process.env.AI_STUDIO_SESSION_SIGNING_SECRET;
   const service=process.env.SUPABASE_SERVICE_ROLE_KEY, url=process.env.SUPABASE_URL;
-  if (!key || key.length<32 || !signing || signing.length<32 || !service ||
+  if (!signing || signing.length<32 || !service ||
     url !== "https://zjiemjcilgbxrtqcovkz.supabase.co") return json({error:"Server not configured"},503);
-  if (!same(request.headers.get("x-ai-studio-preview-key"),key)) return json({error:"Unauthorized"},401);
+  if (process.env.AI_STUDIO_REQUIRE_PREVIEW_KEY==="true" && (!key || key.length<32 || !same(request.headers.get("x-ai-studio-preview-key"),key))) return json({error:"Unauthorized"},401);
   const auth=await authorize(request);
   if(auth.error)return auth.error;
   if(!await enforceLimit(auth.key,auth.userId,"ai-studio-upload.mjs",20))return respond({error:"Rate limit exceeded"},429);
