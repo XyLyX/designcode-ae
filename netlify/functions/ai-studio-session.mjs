@@ -1,3 +1,4 @@
+import { authorize, limit as enforceLimit } from "./_ai-studio-security.mjs";
 // Internal-only API scaffold. Deliberately fails closed until access controls,
 // privacy consent, rate limits and operational monitoring are approved.
 import { timingSafeEqual, createHmac } from "node:crypto";
@@ -27,6 +28,9 @@ export default async function handler(request) {
   if (!equal(request.headers.get("x-ai-studio-preview-key"), previewKey)) {
     return json({ error: "Unauthorized" }, 401);
   }
+  const auth=await authorize(request);
+  if(auth.error)return auth.error;
+  if(!await enforceLimit(auth.key,auth.userId,"ai-studio-session.mjs",12))return json({error:"Rate limit exceeded"},429);
   const type = request.headers.get("content-type") || "";
   if (!type.toLowerCase().startsWith("application/json")) return json({ error: "JSON required" }, 415);
   const length = Number(request.headers.get("content-length") || 0);
@@ -48,7 +52,7 @@ export default async function handler(request) {
     return json({ error: "Invalid budget" }, 400);
   }
   // Never accept consent implicitly; no photos or AI processing occur in this scaffold.
-  const payload = { room_type: room, style_preference: style || null, dimensions_note: dimensions,
+  const payload = { owner_user_id: auth.userId, room_type: room, style_preference: style || null, dimensions_note: dimensions,
     restrictions_note: restrictions, budget_aed: budget };
   try {
     const response = await fetch(url.replace(/\/$/, "") + "/rest/v1/ai_design_sessions", {
