@@ -21,11 +21,11 @@ export default async function handler(request) {
   const previewKey = process.env.AI_STUDIO_PREVIEW_KEY;
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   const url = process.env.SUPABASE_URL;
-  if (!previewKey || previewKey.length < 32 || !serviceKey || !process.env.AI_STUDIO_SESSION_SIGNING_SECRET || process.env.AI_STUDIO_SESSION_SIGNING_SECRET.length < 32 || !url ||
+  if (!serviceKey || !process.env.AI_STUDIO_SESSION_SIGNING_SECRET || process.env.AI_STUDIO_SESSION_SIGNING_SECRET.length < 32 || !url ||
       !/^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/.test(url)) {
     return json({ error: "Server not configured" }, 503);
   }
-  if (!equal(request.headers.get("x-ai-studio-preview-key"), previewKey)) {
+  if (process.env.AI_STUDIO_REQUIRE_PREVIEW_KEY === "true" && (!previewKey || previewKey.length < 32 || !equal(request.headers.get("x-ai-studio-preview-key"), previewKey))) {
     return json({ error: "Unauthorized" }, 401);
   }
   const auth=await authorize(request);
