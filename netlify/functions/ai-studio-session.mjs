@@ -1,6 +1,6 @@
 // Internal-only API scaffold. Deliberately fails closed until access controls,
 // privacy consent, rate limits and operational monitoring are approved.
-import { timingSafeEqual } from "node:crypto";
+import { timingSafeEqual, createHmac } from "node:crypto";
 
 const json = (body, status = 200) => new Response(JSON.stringify(body), {
   status, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" }
@@ -20,7 +20,7 @@ export default async function handler(request) {
   const previewKey = process.env.AI_STUDIO_PREVIEW_KEY;
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   const url = process.env.SUPABASE_URL;
-  if (!previewKey || previewKey.length < 32 || !serviceKey || !url ||
+  if (!previewKey || previewKey.length < 32 || !serviceKey || !process.env.AI_STUDIO_SESSION_SIGNING_SECRET || process.env.AI_STUDIO_SESSION_SIGNING_SECRET.length < 32 || !url ||
       !/^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/.test(url)) {
     return json({ error: "Server not configured" }, 503);
   }
@@ -59,7 +59,13 @@ export default async function handler(request) {
     if (!response.ok) return json({ error: "Unable to create draft" }, 502);
     const records = await response.json();
     if (!Array.isArray(records) || !records[0]?.id) return json({ error: "Unexpected backend response" }, 502);
-    return json({ id: records[0].id, status: "draft" }, 201);
+    const secret = process.env.AI_STUDIO_SESSION_SIGNING_SECRET;
+    if (!secret || secret.length < 32) return json({ error: "Session signing not configured" }, 503);
+    const expires = Math.floor(Date.now() / 1000) + 1800;
+    const claim = records[0].id + "." + expires;
+    const signature = createHmac("sha256", secret).update(claim).digest("hex");
+    return json({ id: records[0].id, status: "draft", session_token: claim + "." + signature,
+      expires_at: new Date(expires * 1000).toISOString() }, 201);
   } catch {
     return json({ error: "Backend unavailable" }, 502);
   }
